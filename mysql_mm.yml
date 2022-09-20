@@ -88,12 +88,18 @@
 
 
 
-    - name: create replica user
+
+    - name: set log 0
       shell: mysql -u root  -pTemp@7771 -e "SET SQL_LOG_BIN=0"
+    - name: create replica user
       shell: mysql -u root  -pTemp@7771 -e "CREATE USER replica@'%' IDENTIFIED BY 'Redhat@9090'"
+    - name: allow grant to replica user
       shell: mysql -u root  -pTemp@7771 -e "GRANT REPLICATION SLAVE ON *.* TO replica@'%'"
+    - name: flush
       shell: mysql -u root  -pTemp@7771 -e "FLUSH PRIVILEGES"
+    - name: set log 1
       shell: mysql -u root  -pTemp@7771 -e "SET SQL_LOG_BIN=1"
+    - name: create master
       shell: mysql -u root  -pTemp@7771 -e "CHANGE MASTER TO MASTER_USER='replica', MASTER_PASSWORD='Redhat@9090' FOR CHANNEL 'group_replication_recovery'"
 
 
