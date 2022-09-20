@@ -84,4 +84,20 @@
       when: ansible_hostname != "{{ item }}" or ansible_hostname == "{{ item }}"
       with_items: "{{groups['self']}}"
 
+    - name: Restart Mysql
+      service:
+        name: mysql
+        state: restarted
+        enabled: True
+
+
+
+    - name: create replica user
+      shell: mysql -u root  -pTemp@7771 -e "SET SQL_LOG_BIN=0"
+      shell: mysql -u root  -pTemp@7771 -e "CREATE USER replica@'%' IDENTIFIED BY 'Redhat@9090'"
+      shell: mysql -u root  -pTemp@7771 -e "GRANT REPLICATION SLAVE ON *.* TO replica@'%'"
+      shell: mysql -u root  -pTemp@7771 -e "FLUSH PRIVILEGES"
+      shell: mysql -u root  -pTemp@7771 -e "SET SQL_LOG_BIN=1"
+      shell: mysql -u root  -pTemp@7771 -e "CHANGE MASTER TO MASTER_USER='replica', MASTER_PASSWORD='Redhat@9090' FOR CHANNEL 'group_replication_recovery'"
+
 
