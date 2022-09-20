@@ -89,7 +89,6 @@ binlog_format=ROW
 master_info_repository=TABLE
 relay_log_info_repository=TABLE
 transaction_write_set_extraction=XXHASH64
-read_only=0
 
 plugin_load_add='group_replication.so'
 group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
